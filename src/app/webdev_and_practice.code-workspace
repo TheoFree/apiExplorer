@@ -1,0 +1,32 @@
+{
+	"folders": [
+		{
+			"name": "Code Practice",
+			"path": "..\\..\\..\\..\\Code Practice"
+		},
+		{
+			"name": "MEANstack",
+			"path": "..\\..\\..\\..\\MEANstack"
+		},
+		{
+			"name": "CharSheetNew",
+			"path": "..\\..\\..\\CharSheetNew"
+		},
+		{
+			"name": "portfolio",
+			"path": "..\\..\\..\\portfolio"
+		},
+		{
+			"name": "apiExplorer",
+			"path": "..\\.."
+		}
+	],
+	"settings": {
+		"terminal.integrated.cursorBlinking": true,
+		"terminal.integrated.cursorStyle": "line",
+		"terminal.integrated.env.windows": {
+			"mongo":"C:\\Program Files\\MongoDB\\Server\\4.2\\bin"
+			
+		}
+	}
+}

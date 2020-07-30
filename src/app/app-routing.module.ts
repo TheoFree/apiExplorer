@@ -1,8 +1,32 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
+import { MapsComponent } from './components/apis/maps/maps.component';
+import { MydbapiComponent } from './components/apis/mydbapi/mydbapi.component';
 
-
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path:'',
+    pathMatch:'full',
+    redirectTo:'home'
+  },
+  {
+    path:'home',
+    component:HomeComponent
+  },
+  {
+    path:'mydbapi',
+    component:MydbapiComponent
+  },
+  {
+    path:'maps',
+    component:MapsComponent
+  },
+  {
+    path:'**',
+    redirectTo:''
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

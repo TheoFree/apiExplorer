@@ -1,0 +1,9 @@
+<div>
+    Time: {{ time | async }} 
+</div>
+<div>
+    <div class="output-container">
+        {{this.output | async}}
+    </div>
+    <button class="btn btn-primary w-100" (click)="this.clearOutput()">Clear</button>
+</div>

@@ -1,0 +1,4 @@
+{
+    "localDBUrl" : "http://localhost:3002/api/v1/",
+    "textfile" : "assets/textfile.txt"
+}
