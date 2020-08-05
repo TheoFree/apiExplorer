@@ -9,7 +9,8 @@ import { NavComponent } from './components/nav/nav.component';
 
 import { HttpClientModule} from '@angular/common/http';
 import { MydbapiComponent } from './components/apis/mydbapi/mydbapi.component';
-import { ObspracticeComponent } from './components/obs/obspractice/obspractice.component'
+import { ObspracticeComponent } from './components/obs/obspractice/obspractice.component';
+import { NasaComponent } from './components/apis/nasa/nasa.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,7 +18,8 @@ import { ObspracticeComponent } from './components/obs/obspractice/obspractice.c
     HomeComponent,
     NavComponent,
     MydbapiComponent,
-    ObspracticeComponent
+    ObspracticeComponent,
+    NasaComponent
   ],
   imports: [
     BrowserModule,

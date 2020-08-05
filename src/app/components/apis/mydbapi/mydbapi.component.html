@@ -1,0 +1,77 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light" *ngIf="this.loggedin">
+    <a class="navbar-brand" (click)="this.loggedin = false">Log Out</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" (click)="this.display='allProd'">All Products</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" (click)="this.display='modProd';this.dbProductsGet();"> Modify Product</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <div *ngIf="this.loggedin">
+                <div *ngIf="this.display == 'allProd'">
+                    Display All products in DB
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Brand</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                            <tr *ngFor="let product of this.products">
+                                <td>{{product.name}}</td>
+                                <td>{{product.brand}}</td>
+                                <td>{{product.price}}</td>
+                            </tr>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div *ngIf="this.display == 'modProd'">
+                    Display form for adding product to database
+                    <div >
+                        <form class="form">
+                            Product Name:
+                            <input type="text" name="pName"[(ngModel)]="ProdName">
+                            Product Brand:
+                            <input type="text" name="pBrand"[(ngModel)]="ProdBrand">
+                            Product Price:
+                            <input type="number" name="pPrice"[(ngModel)]="ProdPrice">
+                            <button class="btn btn-dark" type="submit" (click)="this.dbProductAdd()">Add Product</button> <!-- <input type="submit" (onSubmit)= (click)="this.dbProductAdd"> -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!this.loggedin">
+                Sign Up Dialog for DB
+                <div class="form">
+                    email: <input type="text" class="text w-75" [(ngModel)]='userEmail'>
+                    <br />
+                    password: <input type="password" [(ngModel)]='userPassword'>
+                    <br />
+                    <button class="btn btn-dark submit mr-2" (click)="this.dbRegister()">Create User</button>
+                    <button class="btn btn-dark submit " (click)="this.dbLogin()">Login</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+   <!--  <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            {{this.result}}
+            <button class="btn btn-dark" (click)="clearResults()">clear results</button></div>
+        <div class="col-sm-4"></div>
+    </div> -->
+</div>

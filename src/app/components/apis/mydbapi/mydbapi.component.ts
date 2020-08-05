@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Config,ConfigService } from 'src/app/services/config.service';
+import { Config, ConfigService } from 'src/app/services/config.service';
+import { ObspracticeService } from 'src/app/services/obs/obspractice.service';
 
 @Component({
   selector: 'app-mydbapi',
@@ -7,30 +8,60 @@ import { Config,ConfigService } from 'src/app/services/config.service';
   styleUrls: ['./mydbapi.component.scss']
 })
 export class MydbapiComponent implements OnInit {
+  constructor(private obsP: ObspracticeService) { }
+  public loggedin: boolean = false;
+  public userEmail: string = '';
+  public userPassword: string = '';
+  public result: string = '';
+  private token: string = '';
+  public display: string = 'allProd';
+  public products: object[] = [];
+  public ProdName: string = '';
+  public ProdBrand: string = '';
+  public ProdPrice: number = 0;
+  clearResults = () => this.result = '';
+  dbRegister = () => {
+    this.obsP.dbRegister(this.userEmail, this.userPassword)
+      .subscribe(response => {
+        this.result = response.body.message;
+        if (response.body.message != "Signup successful") {
+          this.userEmail, this.userPassword = "";
+          this.loggedin = false;
+        };
 
+      });
 
-  
-  constructor(private configService: ConfigService) { }
-  config: Config;  
-  headers;
+  };
+  dbLogin = () => {
+    this.obsP.dbLogin(this.userEmail, this.userPassword)
+      .subscribe(response => {
+        this.result = response.message;
+        if (response.message == "Login Successfull") {
+          this.loggedin = true;
+          this.token = response.body.token
+          this.dbProductsGet();
+        }
+        else {
+          this.userEmail, this.userPassword = "";
+          this.loggedin = false;
+        }
 
-  showConfig(){
-    this.configService.getConfig().subscribe((data: Config) => this.config = {
-      heroesUrl: (data as any).heroesUrl,
-      textfile: (data as any).textfile,
-    });
+      });
+
 
   }
-  showConfigResponse(){
-    this.configService.getConfigResponse()
-    .subscribe(resp =>{
-      const keys = resp.headers.keys();
-      this.headers = keys.map(key=>`${key}:${resp.headers.get(key)}`);
-      this.config = {...resp.body};
-    })
+  dbProductsGet = () => {
+    this.obsP.dbProductsGetAll(this.token)
+      .subscribe(response => {
+        this.products = response.body;
+      })
+  }
+  dbProductAdd = () => {
+    this.obsP.dbProductsAdd(this.token, this.ProdName, this.ProdBrand, this.ProdPrice)
+      .subscribe();
   }
   ngOnInit(): void {
-       
+    //  this.obsP.dbRegister("Ted","tester").subscribe();
   }
 
 }
