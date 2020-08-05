@@ -1,1 +1,166 @@
-<p>neo works!</p>
+<div class="conainer-fluid">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6 text-center">
+            <h3>Nasa's Near Earth Object listings</h3>
+            <strong>What do you want to view?</strong>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <div class="row text-center">
+        <div class="col-sm-4">
+            <h4>A span of a few days?</h4>
+            <!-- <h4>For a Feed</h4> -->
+            <label for="streamStartDate"> Start Date:</label>
+            <input type="text" name="streamStartDate" [(ngModel)]="StreamStart" placeholder="YYYY-MM-DD">
+            <br>
+            <label for="streamEndDate"> End Date:</label>
+            <input type="text" name="streamEndDate" [(ngModel)]="StreamEnd" placeholder="Default: start +7 days">
+            <br>
+
+        </div>
+        <div class="col-sm-4">
+            <h4>A single object?</h4>
+            <label for="objectID">ID for query:</label>
+            <input type="text" name="objectID" [(ngModel)]="NEOId">
+            <br>
+
+        </div>
+        <div class="col-sm-4">
+            <h4>Browse a list?</h4>
+        </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-sm-4"><button class="btn btn-primary mx-auto w-50" type="submit"
+                (click)="this.getNeoFeed()">Submit</button></div>
+        <div class="col-sm-4"><button class="btn btn-primary mx-auto w-50" type="submit"
+                (click)="this.getNeoObject()">Submit</button></div>
+        <div class="col-sm-4"><button class="btn btn-primary mx-auto w-50" type="submit">Submit</button></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6 text-center">
+            <div class="container" *ngIf="this.NEOFeedData">
+                <ng-container *ngFor="let day of this.NEOFeedData; index as i">
+                    <!-- <div > -->
+                    <button class="btn btn-dark" (click)="this.NEOFeedDay=i" style="display: inline-box;">
+                        Day {{i+1}}
+                    </button>
+                    <!-- </div> -->
+                </ng-container>
+                <div *ngIf="this.NEOFeedDay!=-1">
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>ID</th>
+                                <th>Nasa Details Link</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let astroid of this.NEOFeedData[this.NEOFeedDay]">
+                                <td>{{astroid.name}}</td>
+                                <td>{{astroid.neo_reference_id}}</td>
+                                <td><a [href]="astroid.nasa_jpl_url">{{astroid.nasa_jpl_url}}</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="container text-center mt-5" *ngIf="this.NEOAstroidData">
+                <h3>
+                    <strong>
+                        Name: {{this.NEOAstroidData.name}} | ID: {{this.NEOAstroidData.id}} | Designation:
+                        {{this.NEOAstroidData.designation}}
+                        <br>
+                        Nasa JPL URL: <a
+                            [href]="this.NEOAstroidData.nasa_jpl_url">{{this.NEOAstroidData.nasa_jpl_url}}</a>
+                    </strong>
+                </h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Absolute Magnitude_H</th>
+                            <th>
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="diameterUnits"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Estimated Diameter ({{this.SizeUnitSel}})
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="diameterUnits">
+                                    <button class="btn btn-secondary btn-sm "
+                                        (click)="this.SizeUnits('kilometers')">Kilometers</button>
+                                    <button class="btn btn-secondary btn-sm ml-2"
+                                        (click)="this.SizeUnits('meters')">Meters</button>
+                                    <button class="btn btn-secondary btn-sm ml-2" (click)="this.SizeUnits('miles')">Miles</button>
+                                    <button class="btn btn-secondary btn-sm ml-2" (click)="this.SizeUnits('feet')">Feet</button>
+                                </div>
+                            </th>
+                            <th>Potentially Hazardous?</th>
+                            <th>Close Approach Time</th>
+                            <th>
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="velocityUnits"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Relative Velocity ({{this.VelocityUnitSel}})
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="velocityUnits">
+                                    <button class="btn btn-secondary btn-sm "
+                                        (click)="this.VelocityUnits('kilometers_per_second')">KMps</button>
+                                    <button class="btn btn-secondary btn-sm ml-2"
+                                        (click)="this.VelocityUnits('kilometers_per_hour')">KMph</button>
+                                    <button class="btn btn-secondary btn-sm ml-2"
+                                        (click)="this.VelocityUnits('miles_per_hour')">Mph</button>
+
+                                </div>
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{this.NEOAstroidData.absolute_magnitude_h}}</td>
+                            <td>
+                                <div *ngIf="this.SizeUnitSel=='kilometers'">
+                                    Max: {{this.NEOAstroidData.estimated_diameter.kilometers.estimated_diameter_max}}
+                                    <br>
+                                    Min: {{this.NEOAstroidData.estimated_diameter.kilometers.estimated_diameter_min}}
+                                </div>
+                                <div *ngIf="this.SizeUnitSel=='meters'">
+                                    Max: {{this.NEOAstroidData.estimated_diameter.meters.estimated_diameter_max}}
+                                    <br>
+                                    Min: {{this.NEOAstroidData.estimated_diameter.meters.estimated_diameter_min}}
+                                </div>
+                                <div *ngIf="this.SizeUnitSel=='miles'">
+                                    Max: {{this.NEOAstroidData.estimated_diameter.miles.estimated_diameter_max}}
+                                    <br>
+                                    Min: {{this.NEOAstroidData.estimated_diameter.miles.estimated_diameter_min}}
+                                </div>
+                                <div *ngIf="this.SizeUnitSel=='feet'">
+                                    Max: {{this.NEOAstroidData.estimated_diameter.feet.estimated_diameter_max}}
+                                    <br>
+                                    Min: {{this.NEOAstroidData.estimated_diameter.feet.estimated_diameter_min}}
+                                </div>
+
+                            </td>
+                            <td>{{this.NEOAstroidData.is_potentially_hazardous_asteroid}}</td>
+                            <td>{{this.NEOAstroidData.close_approach_data[0].close_approach_date_full}}</td>
+                            <td>
+                                <div *ngIf="this.VelocityUnitSel=='kilometers_per_second'">
+                                    {{this.NEOAstroidData.close_approach_data[0].relative_velocity.kilometers_per_second}}
+                                </div>
+                                <div *ngIf="this.VelocityUnitSel=='kilometers_per_hour'">
+                                    {{this.NEOAstroidData.close_approach_data[0].relative_velocity.kilometers_per_hour}}
+                                </div>
+                                <div *ngIf="this.VelocityUnitSel=='miles_per_hour'">
+                                    {{this.NEOAstroidData.close_approach_data[0].relative_velocity.miles_per_hour}}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-3"></div>
+
+    </div>
+</div>

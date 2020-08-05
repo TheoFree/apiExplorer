@@ -12,7 +12,7 @@ export class NasaService {
         .set('api_key', 'MYWe0Bg89zVn5pmrUh7GY0Vfav9zG6XB2NeGf5A4')
     })
   }
-  getNEO_Feed(start_date: string, end_date?: string, astroid_id?:number): Observable<any> {
+  getNEO_Feed(start_date?: string, end_date?: string): Observable<any> {
     if (end_date && start_date) {
       return this.http.get('https://api.nasa.gov/neo/rest/v1/feed', {
         params: new HttpParams()
@@ -27,20 +27,20 @@ export class NasaService {
           .set('start_date', start_date)
           .set('api_key', 'MYWe0Bg89zVn5pmrUh7GY0Vfav9zG6XB2NeGf5A4')
       })
-    }
-    if (astroid_id){
-      return this.http.get('https://api.nasa.gov/neo/rest/v1/neo', {
-        params: new HttpParams()
-          .set('asteroid_id', astroid_id.toString())
-          .set('api_key', 'MYWe0Bg89zVn5pmrUh7GY0Vfav9zG6XB2NeGf5A4')
-      })
-    }
+    }   
     else{
       return this.http.get('https://api.nasa.gov/neo/rest/v1/browse', {
         params: new HttpParams()
           .set('api_key', 'MYWe0Bg89zVn5pmrUh7GY0Vfav9zG6XB2NeGf5A4')
       })
     }
+  }
+  getNEO_Asteroid(astroid_id?:number):Observable<any>{
+    return this.http.get('https://api.nasa.gov/neo/rest/v1/neo/'+astroid_id.toString(), {
+      params: new HttpParams()
+        // .set('asteroid_id', astroid_id.toString())
+        .set('api_key', 'MYWe0Bg89zVn5pmrUh7GY0Vfav9zG6XB2NeGf5A4')
+    })
   }
   constructor(private http: HttpClient) { }
 }

@@ -13,7 +13,16 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/maps">Google Maps API</a>
       </li>
-      <li class="nav-item"><a class="nav-link" routerLink="/nasa">Nasa API</a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle"  id="navbarDropdownMenuLink" role="button"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Nasa APIs
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a routerLink="/nasa/APOD" class="dropdown-item">Astronomy Picture of the Day API</a>
+          <a routerLink="/nasa/NEO" class="dropdown-item">Near Earth Objects API</a>
+        </div>
+      </li>
     </ul>
   </div>
 </nav>

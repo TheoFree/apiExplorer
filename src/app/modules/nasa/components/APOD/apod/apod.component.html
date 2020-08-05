@@ -1,22 +1,9 @@
-<span class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
-        Select API to view
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" (click)="this.view ='APOD'">A.P.O.D.</a>
-        <a class="dropdown-item" (click)="this.view ='NEOFeed'">Near Earth Object Listings</a>
-        <a class="dropdown-item" href="#">Something else here</a>
-    </div>
-</span>
-<span>
-    - Select an API from Nasa to view. I've not set them all up, but more can be viewed from <a href="https://api.nasa.gov/index.html#browseAPI">Nasa's API Website</a>
-</span>
-<div class="container-fluid" *ngIf="this.view == 'APOD'">
+<div class="container-fluid" >
     <div class="row">
         <div class="col-sm-3"></div>
         <div class="col-sm-6 card card">
-            <img [src]="this.img" alt="" style="width:50%;margin:auto;padding-top: 15px;">
+            <img [src]="this.img" alt="" style="width:50%;margin:auto;padding-top: 15px;" *ngIf="this.img">
+            <iframe [src]="this.vidURL" style=" width:auto;margin: auto; margin-top: 15px;" *ngIf="!this.img" allowfullscreen></iframe>
             <div class="card-body dark text-center text-justify">
                 {{this.title}} | {{this.copyright}} | {{this.date}}
                 <hr>
@@ -24,25 +11,5 @@
             </div>
         </div>
         <div class="col-sm-3"></div>
-    </div>
-</div>
-<div class="conainer-fluid" *ngIF="this.view == 'NEOFeed'">
-    <div class="row">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-6 text-center">
-            <span>Nasa's Near Earth Object listings</span>
-            What do you want to view?
-        </div>
-        <div class="col-sm-3"></div>
-    </div>
-    <div class="row">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-6 text-center">
-            <span>A Stream?</span>
-            <span>A single one?</span>
-            <span>Browse a list?</span>
-        </div>
-        <div class="col-sm-3"></div>
-        
     </div>
 </div>
