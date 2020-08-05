@@ -23,10 +23,7 @@ const routes: Routes = [
     path:'maps',
     component:MapsComponent
   },
-  {
-    path:'nasa',
-    component:NasaComponent
-  },
+  { path: 'nasa', loadChildren: () => import('./modules/nasa/nasa.module').then(m => m.NasaModule) },
   {
     path:'**',
     redirectTo:''

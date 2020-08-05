@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NasaService } from 'src/app/services/nasa.service';
+import { NasaService } from 'src/app/modules/nasa/nasa.service';
 
 @Component({
   selector: 'app-nasa',
