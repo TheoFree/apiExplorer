@@ -1,1 +1,44 @@
-<p>insight works!</p>
+<div class="container-fluid">
+    <div class="row text-center">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">Mars Wind Data per Sol (1 Mars day)</div>
+        <div class="col-sm-4"></div>
+    </div>
+    <div class="row text-center">
+        <div class="col-sm">Chart Goes Below</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 offset-3 text-center">
+            Select which sol to view:
+            <div class="container" *ngIf="this.dataLoaded">
+                <div *ngFor="let sol of this.collection.sol_keys" style="display:inline-block">
+                    <button class="btn btn-sm btn-secondary mx-2" (click)="this.setSol(sol)">{{sol}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="this.dataLoaded">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <dx-polar-chart #chart id="radarChart" palette="soft" title="Wind Rose, Mars {{this.selectedSolNum}}"
+                [dataSource]="this.data">
+                <dxi-series *ngFor="let point of this.data" [valueField]="point[1]" [name]="point[0]">
+                </dxi-series>
+                <!-- <dxo-common-series-settings type="stackedbar"></dxo-common-series-settings> -->
+                <!-- <dxo-margin [bottom]="50" [left]="100">
+                </dxo-margin> -->
+                <dxo-argument-axis discreteAxisDivisionMode="crossLabesl" [firstPointOnStartAngle]="true">
+                </dxo-argument-axis>
+                <dxo-value-axis [valueMarginsEnabled]="false"></dxo-value-axis>
+                <dxo-export [enabled]="true"></dxo-export>
+            </dx-polar-chart>
+            <!-- <div class="center">
+                <dx-select-box [dataSource]="this.data" displayExpr="period"
+                    valueExpr="values" [(value)]="chart.dataSource" [width]="300">
+
+                </dx-select-box>
+            </div> -->
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+</div>
