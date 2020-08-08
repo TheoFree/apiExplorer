@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { NasaComponent } from './nasa.component';
 import { ApodComponent } from './components/APOD/apod/apod.component';
 import { NeoComponent } from './components/NEO/neo/neo.component';
+import { InsightComponent } from './components/InSight/insight/insight.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'NEO',
     component: NeoComponent
+  },
+  {
+    path: 'InSight',
+    component: InsightComponent
   }
 ];
 

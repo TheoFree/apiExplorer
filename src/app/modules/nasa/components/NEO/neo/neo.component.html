@@ -1,16 +1,19 @@
 <div class="conainer-fluid">
-    <div class="row">
+    <div class="row no-gutters">
         <div class="col-sm-3"></div>
         <div class="col-sm-6 text-center">
-            <h3>Nasa's Near Earth Object listings</h3>
-            <strong>What do you want to view?</strong>
+            <h3>Nasa's Near Earth Object Webservice</h3>
+            <strong>How do you want to search?</strong>
         </div>
         <div class="col-sm-3"></div>
     </div>
-    <div class="row text-center">
+    <div class="row text-center no-gutters">
+        <!-- Request Submission -->
         <div class="col-sm-4">
-            <h4>A span of a few days?</h4>
-            <!-- <h4>For a Feed</h4> -->
+            <!-- For Date Range -->
+            <button class="btn btn-primary mx-auto w-50 mb-2" type="submit" (click)="this.getNeoFeed()">Search by date
+                range</button>
+            <br>
             <label for="streamStartDate"> Start Date:</label>
             <input type="text" name="streamStartDate" [(ngModel)]="StreamStart" placeholder="YYYY-MM-DD">
             <br>
@@ -20,40 +23,38 @@
 
         </div>
         <div class="col-sm-4">
-            <h4>A single object?</h4>
+            <!-- For ID Lookup -->
+            <button class="btn btn-primary mx-auto mb-2 w-50" type="submit" (click)="this.getNeoObject()">Search by ID
+                number</button>
+            <br>
             <label for="objectID">ID for query:</label>
             <input type="text" name="objectID" [(ngModel)]="NEOId">
             <br>
 
         </div>
         <div class="col-sm-4">
-            <h4>Browse a list?</h4>
+            <!-- For Browse -->
+            <button class="btn btn-primary mx-auto w-50" type="submit" (click)="this.getNeoBrowse()">Browse</button>
         </div>
     </div>
-    <div class="row text-center">
-        <div class="col-sm-4"><button class="btn btn-primary mx-auto w-50" type="submit"
-                (click)="this.getNeoFeed()">Submit</button></div>
-        <div class="col-sm-4"><button class="btn btn-primary mx-auto w-50" type="submit"
-                (click)="this.getNeoObject()">Submit</button></div>
-        <div class="col-sm-4"><button class="btn btn-primary mx-auto w-50" type="submit">Submit</button></div>
-    </div>
-    <div class="row">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-6 text-center">
-            <div class="container" *ngIf="this.NEOFeedData">
+    <div class="row no-gutters">
+        <!-- Request Response Display -->
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8 text-center ">
+            <div class="container" *ngIf="this.NEOFeedShow">
+                <!-- For Date Range -->
                 <ng-container *ngFor="let day of this.NEOFeedData; index as i">
-                    <!-- <div > -->
-                    <button class="btn btn-dark" (click)="this.NEOFeedDay=i" style="display: inline-box;">
+                    <button class="btn btn-dark m-2 " (click)="this.NEOFeedDay=i" style="display: inline-box;">
                         Day {{i+1}}
                     </button>
-                    <!-- </div> -->
                 </ng-container>
-                <div *ngIf="this.NEOFeedDay!=-1">
-                    <table class="table">
+                <button class="btn btn-dark mx-2" (click)="this.close()">Close</button>
+                <div *ngIf="this.NEOFeedDay!=-1" style="overflow-y: auto; max-height:500px;">
+                    <table class="table table-dark">
 
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th style="width:16vw">Name</th>
                                 <th>ID</th>
                                 <th>Nasa Details Link</th>
                             </tr>
@@ -61,106 +62,243 @@
                         <tbody>
                             <tr *ngFor="let astroid of this.NEOFeedData[this.NEOFeedDay]">
                                 <td>{{astroid.name}}</td>
-                                <td>{{astroid.neo_reference_id}}</td>
+                                <td>
+                                    <button class="btn btn-secondary"
+                                        (click)="this.getNeoObject(undefined,astroid.links.self)">
+                                        {{astroid.neo_reference_id}}</button>
+                                </td>
                                 <td><a [href]="astroid.nasa_jpl_url">{{astroid.nasa_jpl_url}}</a></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="container text-center mt-5" *ngIf="this.NEOAstroidData">
-                <h3>
-                    <strong>
-                        Name: {{this.NEOAstroidData.name}} | ID: {{this.NEOAstroidData.id}} | Designation:
-                        {{this.NEOAstroidData.designation}}
-                        <br>
-                        Nasa JPL URL: <a
-                            [href]="this.NEOAstroidData.nasa_jpl_url">{{this.NEOAstroidData.nasa_jpl_url}}</a>
-                    </strong>
-                </h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Absolute Magnitude_H</th>
-                            <th>
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="diameterUnits"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Estimated Diameter ({{this.SizeUnitSel}})
+
+            <div class="container-fluid card text-center " *ngIf="this.NEOBrowseShow">
+                <!-- For Browse -->
+
+                <div class="row card-header ">
+                    <div class="col-sm-2">
+                        <button class="btn btn-sm btn-secondary"
+                            (click)="this.getNeoBrowse(this.NEOBrowseData.links.prev)"
+                            *ngIf="this.NEOBrowseData.links.prev">Previous</button>
+                    </div>
+                    <div class="col-sm-2 offset-sm-3">
+                        Page - {{this.NEOBrowseData.page.number + 1}}
+                    </div>
+                    <div class="col-sm-2 offset-sm-3">
+                        <button class="btn btn-sm btn-secondary"
+                            (click)="this.getNeoBrowse(this.NEOBrowseData.links.next)"
+                            *ngIf="this.NEOBrowseData.links.next">Next</button>
+                    </div>
+                </div>
+                <div class="row card-body ">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width:400px">Name:</th>
+                                <th>ID:</th>
+                                <th>Link:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let astroid of this.NEOBrowseData.near_earth_objects">
+                                <td>{{astroid.name}}</td>
+                                <td>{{astroid.id}}</td>
+                                <td><button class="btn btn-sm btn-secondary"
+                                        (click)="this.getNeoObject(undefined, astroid.links.self)">View Me</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+
+    </div>
+    <div class="row no-gutters">
+        <div class="col-sm-6 offset-3">
+            <div class="container card text-center mt-5 no-gutters" *ngIf="this.NEOAstroidShow">
+                <!-- For ID Lookup -->
+                <div class="card card-header">
+
+                    <h3 style="display: inline-block;">
+                        <strong>
+                            Name: {{this.NEOAstroidData.name}} | ID: {{this.NEOAstroidData.id}} | Designation:
+                            {{this.NEOAstroidData.designation}}
+                            <br>
+                            Nasa JPL URL: <a
+                                [href]="this.NEOAstroidData.nasa_jpl_url">{{this.NEOAstroidData.nasa_jpl_url}}</a>
+                        </strong>
+                    </h3>
+                    <button class="btn btn-secondary" *ngIf="this.NEOFeedData" (click)="this.goToFeed()"
+                        style="display: inline-block;">Back</button>
+                    <button class="btn btn-secondary" *ngIf="this.NEOBrowseData" (click)="this.goToBrowse()"
+                        style="display: inline-block;">Back</button>
+                </div>
+                <div class="card card-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-">
+                                <strong> Estimated Diameter </strong>
+                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                                    id="diameterUnits" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    ({{this.units.SizeUnitSel}})
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="diameterUnits">
-                                    <button class="btn btn-secondary btn-sm "
+                                <div class="dropdown-menu" aria-labelledby="diameterUnits" style="max-width:100px">
+                                    <button type="button" class="btn btn-secondary btn-sm "
                                         (click)="this.SizeUnits('kilometers')">Kilometers</button>
-                                    <button class="btn btn-secondary btn-sm ml-2"
+                                    <button type="button" class="btn btn-secondary btn-sm ml-2"
                                         (click)="this.SizeUnits('meters')">Meters</button>
-                                    <button class="btn btn-secondary btn-sm ml-2" (click)="this.SizeUnits('miles')">Miles</button>
-                                    <button class="btn btn-secondary btn-sm ml-2" (click)="this.SizeUnits('feet')">Feet</button>
-                                </div>
-                            </th>
-                            <th>Potentially Hazardous?</th>
-                            <th>Close Approach Time</th>
-                            <th>
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="velocityUnits"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Relative Velocity ({{this.VelocityUnitSel}})
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="velocityUnits">
-                                    <button class="btn btn-secondary btn-sm "
-                                        (click)="this.VelocityUnits('kilometers_per_second')">KMps</button>
-                                    <button class="btn btn-secondary btn-sm ml-2"
-                                        (click)="this.VelocityUnits('kilometers_per_hour')">KMph</button>
-                                    <button class="btn btn-secondary btn-sm ml-2"
-                                        (click)="this.VelocityUnits('miles_per_hour')">Mph</button>
-
+                                    <button type="button" class="btn btn-secondary btn-sm ml-2"
+                                        (click)="this.SizeUnits('miles')">Miles</button>
+                                    <button type="button" class="btn btn-secondary btn-sm ml-2"
+                                        (click)="this.SizeUnits('feet')">Feet</button>
                                 </div>
 
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{this.NEOAstroidData.absolute_magnitude_h}}</td>
-                            <td>
-                                <div *ngIf="this.SizeUnitSel=='kilometers'">
-                                    Max: {{this.NEOAstroidData.estimated_diameter.kilometers.estimated_diameter_max}}
+
+                            </div>
+                            <div class="col-sm">
+                                <div *ngIf="this.units.SizeUnitSel=='kilometers'">
+                                    Max:
+                                    {{this.NEOAstroidData.estimated_diameter.kilometers.estimated_diameter_max}}
                                     <br>
-                                    Min: {{this.NEOAstroidData.estimated_diameter.kilometers.estimated_diameter_min}}
+                                    Min:
+                                    {{this.NEOAstroidData.estimated_diameter.kilometers.estimated_diameter_min}}
                                 </div>
-                                <div *ngIf="this.SizeUnitSel=='meters'">
+                                <div *ngIf="this.units.SizeUnitSel=='meters'">
                                     Max: {{this.NEOAstroidData.estimated_diameter.meters.estimated_diameter_max}}
                                     <br>
                                     Min: {{this.NEOAstroidData.estimated_diameter.meters.estimated_diameter_min}}
                                 </div>
-                                <div *ngIf="this.SizeUnitSel=='miles'">
+                                <div *ngIf="this.units.SizeUnitSel=='miles'">
                                     Max: {{this.NEOAstroidData.estimated_diameter.miles.estimated_diameter_max}}
                                     <br>
                                     Min: {{this.NEOAstroidData.estimated_diameter.miles.estimated_diameter_min}}
                                 </div>
-                                <div *ngIf="this.SizeUnitSel=='feet'">
+                                <div *ngIf="this.units.SizeUnitSel=='feet'">
                                     Max: {{this.NEOAstroidData.estimated_diameter.feet.estimated_diameter_max}}
                                     <br>
                                     Min: {{this.NEOAstroidData.estimated_diameter.feet.estimated_diameter_min}}
                                 </div>
+                            </div>
+                            <div class="col-sm"><strong> Is it potentially hazardous? </strong>
+                                --{{this.NEOAstroidData.is_potentially_hazardous_asteroid}}</div>
+                        </div>
+                        <div *ngIf="this.NEOAstroidData.close_approach_data[0]">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <strong> Date of last close approach: </strong>
+                                    {{this.NEOAstroidData.close_approach_data[0].close_approach_date_full}}
+                                </div>
 
-                            </td>
-                            <td>{{this.NEOAstroidData.is_potentially_hazardous_asteroid}}</td>
-                            <td>{{this.NEOAstroidData.close_approach_data[0].close_approach_date_full}}</td>
-                            <td>
-                                <div *ngIf="this.VelocityUnitSel=='kilometers_per_second'">
-                                    {{this.NEOAstroidData.close_approach_data[0].relative_velocity.kilometers_per_second}}
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="row my-2">
+                                        <div class="col-sm-6">
+                                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                                                id="velocityUnits" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                <strong> Relative Velocity</strong> ({{this.units.VelocityUnitSel}})
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="velocityUnits">
+                                                <button class="btn btn-secondary btn-sm ml-2"
+                                                    (click)="this.VelocityUnits('kilometers_per_second')">KMps</button>
+                                                <button class="btn btn-secondary btn-sm ml-2"
+                                                    (click)="this.VelocityUnits('kilometers_per_hour')">KMph</button>
+                                                <button class="btn btn-secondary btn-sm mx-2"
+                                                    (click)="this.VelocityUnits('miles_per_hour')">Mph</button>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div *ngIf="this.units.VelocityUnitSel=='kilometers_per_second'">
+                                                {{this.NEOAstroidData.close_approach_data[0].relative_velocity.kilometers_per_second}}
+                                            </div>
+                                            <div *ngIf="this.units.VelocityUnitSel=='kilometers_per_hour'">
+                                                {{this.NEOAstroidData.close_approach_data[0].relative_velocity.kilometers_per_hour}}
+                                            </div>
+                                            <div *ngIf="this.units.VelocityUnitSel=='miles_per_hour'">
+                                                {{this.NEOAstroidData.close_approach_data[0].relative_velocity.miles_per_hour}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row my-2">
+                                        <div class="col-sm-6">
+                                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                                                id="MissUnits" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                <strong> Miss Distance</strong> ({{this.units.MissUnitSel}})
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="MissUnits">
+                                                <button class="btn btn-secondary btn-sm ml-2"
+                                                    (click)="this.MissUnits('astronomical')">au</button>
+                                                <button class="btn btn-secondary btn-sm ml-2"
+                                                    (click)="this.MissUnits('lunar')">ld</button>
+                                                <button class="btn btn-secondary btn-sm ml-2"
+                                                    (click)="this.MissUnits('kilometers')">km</button>
+                                                <button class="btn btn-secondary btn-sm mx-2"
+                                                    (click)="this.MissUnits('miles')">mi</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div *ngIf="this.units.MissUnitSel=='astronomical'">
+                                                {{this.NEOAstroidData.close_approach_data[0].miss_distance.astronomical}}
+                                            </div>
+                                            <div *ngIf="this.units.MissUnitSel=='lunar'">
+                                                {{this.NEOAstroidData.close_approach_data[0].miss_distance.lunar}}
+                                            </div>
+                                            <div *ngIf="this.units.MissUnitSel=='kilometers'">
+                                                {{this.NEOAstroidData.close_approach_data[0].miss_distance.kilometers}}
+                                            </div>
+                                            <div *ngIf="this.units.MissUnitSel=='miles'">
+                                                {{this.NEOAstroidData.close_approach_data[0].miss_distance.miles}}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div *ngIf="this.VelocityUnitSel=='kilometers_per_hour'">
-                                    {{this.NEOAstroidData.close_approach_data[0].relative_velocity.kilometers_per_hour}}
-                                </div>
-                                <div *ngIf="this.VelocityUnitSel=='miles_per_hour'">
-                                    {{this.NEOAstroidData.close_approach_data[0].relative_velocity.miles_per_hour}}
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            </div>
+                        </div>
+                        <div class="col-sm" *ngIf="!this.NEOAstroidData.close_approach_data[0]">
+                            <strong> Date of last close approach: None</strong>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-sm">
+                                <strong>
+                                    Orbit Data
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="this.NEOAstroidData.close_approach_data[0]">
+                            <div class="col-sm">
+                                <strong> Orbiting Body:</strong>
+                                {{this.NEOAstroidData.close_approach_data[0].orbiting_body}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <strong> Orbit Type:</strong>
+                                {{this.NEOAstroidData.orbital_data.orbit_class.orbit_class_type}}</div>
+                            <div class="col-sm-4">
+                                <strong> Orbit Type Description:</strong>
+                                {{this.NEOAstroidData.orbital_data.orbit_class.orbit_class_description}}</div>
+                            <div class="col-sm-4">
+                                <strong> Orbit Range:</strong>
+                                {{this.NEOAstroidData.orbital_data.orbit_class.orbit_class_range}}</div>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
             </div>
         </div>
-        <div class="col-sm-3"></div>
-
     </div>
 </div>

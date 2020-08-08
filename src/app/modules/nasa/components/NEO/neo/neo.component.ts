@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NasaService } from '../../../services/nasa.service';
+import { Variable } from '@angular/compiler/src/render3/r3_ast';
 
 @Component({
   selector: 'app-neo',
@@ -7,17 +8,21 @@ import { NasaService } from '../../../services/nasa.service';
   styleUrls: ['./neo.component.scss']
 })
 export class NeoComponent implements OnInit {
-  NEOFeed;
-  NEOLookup;
   NEOId: number;
   NEOAstroidData;
-  NEOBrowse;
   NEOFeedData;
-  NEOFeedDay = -1;
+  NEOFeedDay = 0;
   StreamStart;
   StreamEnd;
-  SizeUnitSel='kilometers';
-  VelocityUnitSel='kilometers_per_second'
+  units = {
+  SizeUnitSel : 'kilometers',
+  VelocityUnitSel : 'kilometers_per_second',
+  MissUnitSel : 'kilometers',
+  }
+  NEOFeedShow;
+  NEOAstroidShow;
+  NEOBrowseShow;
+  NEOBrowseData;
   constructor(private nasa: NasaService) { }
   getNeoFeed() {
     if (this.StreamStart && this.StreamEnd) {
@@ -28,7 +33,9 @@ export class NeoComponent implements OnInit {
             data.push(astroids)
           };
           this.NEOFeedData = data;
-          this.NEOAstroidData = undefined;
+          this.NEOBrowseShow = false;
+          this.NEOAstroidShow = false;
+          this.NEOFeedShow = true;
         })
     }
     else if (this.StreamStart) {
@@ -40,31 +47,89 @@ export class NeoComponent implements OnInit {
             data.push(astroids)
           };
           this.NEOFeedData = data;
-          this.NEOAstroidData = undefined;
+          this.NEOBrowseShow = false;
+          this.NEOAstroidShow = false;
+          this.NEOFeedShow = true;
         })
     }
 
   }
-  getNeoObject() {
+  getNeoObject(id?:number,astroid_link?) {
+    if (id) {
+      this.nasa.getNEO_Asteroid(id)
+        .subscribe(response => {
+          this.NEOAstroidData = response;
+          this.NEOFeedShow = false;
+          this.NEOBrowseShow = false;
+          this.NEOAstroidShow = true;
+        });
+    }
+    if(astroid_link){
+      this.nasa.getNEO_Asteroid(undefined,astroid_link)
+        .subscribe(response => {
+          this.NEOAstroidData = response;
+          this.NEOFeedShow = false;
+          this.NEOBrowseShow = false;
+          this.NEOAstroidShow = true;
+        });
+    }
+
     if (this.NEOId) {
       this.nasa.getNEO_Asteroid(this.NEOId)
         .subscribe(response => {
           this.NEOAstroidData = response;
-          this.NEOFeedData = undefined;
+          this.NEOFeedShow = false;
+          this.NEOBrowseShow = false;
+          this.NEOAstroidShow = true;
         });
     }
   }
-  getNeoBrowse() {
-    this.nasa.getNEO_Feed()
+  getNeoBrowse(traversal?:string) {
+    if(traversal){
+      this.nasa.getNeo_List(traversal)
       .subscribe(response => {
-        console.log("called someone")
-      })
+        this.NEOBrowseData = response
+        this.NEOFeedShow = false;
+        this.NEOAstroidShow = false;
+        this.NEOBrowseShow = true;
+        
+      });
+    }
+    if(this.NEOBrowseData){
+      this.goToBrowse()
+    }
+    else{
+    this.nasa.getNeo_List()
+      .subscribe(response => {
+        this.NEOBrowseData = response
+        this.NEOFeedShow = false;
+        this.NEOAstroidShow = false;
+        this.NEOBrowseShow = true;
+        
+      });
+    }
+    
   }
-  SizeUnits = (selected: string) => this.SizeUnitSel = selected;
-  VelocityUnits = (selected: string) => this.VelocityUnitSel = selected;
   
+  SizeUnits = (selected: string) => this.units.SizeUnitSel = selected;
+  VelocityUnits = (selected: string) => this.units.VelocityUnitSel = selected;
+  MissUnits = (unit) => this.units.MissUnitSel = unit;
+  close = () => this.NEOFeedDay = -1;
+  goToFeed = () =>{
+    this.NEOAstroidShow = false;
+    this.NEOBrowseShow = false;
+    this.NEOFeedShow = true;
+  }
+  goToBrowse = () =>{
+    this.NEOAstroidShow = false;
+    this.NEOFeedShow = false;
+    this.NEOBrowseShow = true;
+  }
   ngOnInit(): void {
-    // this.getNeoFeed();
+    // this.getNeoObject(2021277);
+  }
+  ngOnDestory():void{
+
   }
 
 }

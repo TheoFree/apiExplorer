@@ -5,10 +5,11 @@ import { NasaRoutingModule } from './nasa-routing.module';
 import { NasaComponent } from './nasa.component';
 import { ApodComponent } from './components/APOD/apod/apod.component';
 import { NeoComponent } from './components/NEO/neo/neo.component';
-import { FormsModule } from '@angular/forms'
+import { FormsModule } from '@angular/forms';
+import { InsightComponent } from './components/InSight/insight/insight.component'
 
 @NgModule({
-  declarations: [NasaComponent, ApodComponent, NeoComponent],
+  declarations: [NasaComponent, ApodComponent, NeoComponent, InsightComponent],
   imports: [
     CommonModule,
     NasaRoutingModule,
