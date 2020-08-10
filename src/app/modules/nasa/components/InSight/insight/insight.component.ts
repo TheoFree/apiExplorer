@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { keyvalue } from '@angular/common'
+import { KeyValue } from '@angular/common'
 import { NasaService } from '../../../services/nasa.service';
-import { DxPolarChartModule, DxSelectBoxModule } from 'devextreme-angular';
+//mport { DxPolarChartModule, DxSelectBoxModule } from 'devextreme-angular';
 //import {  } from  'node_modules/devextreme-angular'
 @Component({
   selector: 'app-insight',
@@ -10,36 +10,54 @@ import { DxPolarChartModule, DxSelectBoxModule } from 'devextreme-angular';
 })
 export class InsightComponent implements OnInit {
 
-  constructor(private nasa:NasaService) { }
-  private data;
+  constructor(private nasa: NasaService) { }
+  data;
   collection;
   selectedSol;
   selectedSolNum;
-  dataLoaded:boolean = false;
-  getInSight_Basic=()=>{
+  dataLoaded: boolean = false;
+  series = [{ "valueField": "val", "value": "counts per direction" }];
+  allDirections = [
+    { 'arg': 'N','point':0 ,'val': 1 },
+    { 'arg': 'NNE','point':22.5 ,'val': 1 },
+    { 'arg': 'NE','point':45 ,'val': 1 },
+    { 'arg': 'ENE','point':67.5 ,'val': 1 },
+    { 'arg': 'E','point':90 ,'val': 1 },
+    { 'arg': 'ESE','point':112.5 ,'val': 1 },
+    { 'arg': 'SE','point':135 ,'val': 1 },
+    { 'arg': 'SSE','point':157.5 ,'val': 1 },
+    { 'arg': 'S','point':180 ,'val': 1 },
+    { 'arg': 'SSW','point':202.5 ,'val': 1 },
+    { 'arg': 'SW','point':225 ,'val': 1 },
+    { 'arg': 'WSW','point':247.5 ,'val': 1 },
+    { 'arg': 'W','point':270 ,'val': 1 },
+    { 'arg': 'WNW','point':292.5 ,'val': 1 },
+    { 'arg': 'NW','point':315 ,'val': 1 },
+    { 'arg': 'NNW','point':337.5 ,'val': 1 }
+  ]
+  getInSight_Basic = () => {
     this.nasa.getInSight()
-     .subscribe(response=>{
-      this.collection = response;
-      this.setSol(response.sol_keys[0]);
-      this.dataLoaded = true;
-     });
+      .subscribe(response => {
+        this.collection = response;
+        this.setSol(response.sol_keys[0]);
+        this.dataLoaded = true;
+      });
   }
-  setSol(sol:string){
+  setSol(sol: string) {
     this.selectedSol = this.collection[sol];
     this.selectedSolNum = sol;
-    this.data = Object.entries(this.selectedSol.WD);
-    this.data = this.data.map(item=> [item[1]['compass_point'],item[1]['ct']]);
+    this.data = Object.values(this.selectedSol.WD).map(item => {
+      return {
+        "arg": item["compass_point"],
+        "point": item['compass_degrees'],
+        "val": item['ct']
+      }
+    }).concat(this.allDirections).sort((a,b)=>{return a.point-b.point});
+    console.log(this.data);
     
-   // console.log(`selected sol changed to ${this.selectedSol}`);
   }
-  helloWorld() {
-    alert('Hello world!');
-}
   ngOnInit(): void {
     this.getInSight_Basic();
   }
-  ngAfterViewInit(): void{
-    
-  }
-
+  
 }

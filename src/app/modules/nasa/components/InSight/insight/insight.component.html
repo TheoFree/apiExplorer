@@ -18,27 +18,22 @@
         </div>
     </div>
     <div class="row" *ngIf="this.dataLoaded">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-4">
+        <div class="col-sm-1"></div>
+        <div id="chart-display"class="col-sm-10">
             <dx-polar-chart #chart id="radarChart" palette="soft" title="Wind Rose, Mars {{this.selectedSolNum}}"
-                [dataSource]="this.data">
-                <dxi-series *ngFor="let point of this.data" [valueField]="point[1]" [name]="point[0]">
+                [dataSource]="this.data" type="bar">
+                <dxi-series *ngFor="let point of this.series" [valueField]="point.valueField" [name]="point.value">
                 </dxi-series>
-                <!-- <dxo-common-series-settings type="stackedbar"></dxo-common-series-settings> -->
-                <!-- <dxo-margin [bottom]="50" [left]="100">
-                </dxo-margin> -->
+               <dxo-common-series-settings type="stackedbar"></dxo-common-series-settings>
+                <dxo-margin [bottom]="50" [left]="100">
+                </dxo-margin>
                 <dxo-argument-axis discreteAxisDivisionMode="crossLabesl" [firstPointOnStartAngle]="true">
                 </dxo-argument-axis>
                 <dxo-value-axis [valueMarginsEnabled]="false"></dxo-value-axis>
                 <dxo-export [enabled]="true"></dxo-export>
             </dx-polar-chart>
-            <!-- <div class="center">
-                <dx-select-box [dataSource]="this.data" displayExpr="period"
-                    valueExpr="values" [(value)]="chart.dataSource" [width]="300">
-
-                </dx-select-box>
-            </div> -->
+            
         </div>
-        <div class="col-sm-4"></div>
+        <div class="col-sm-1"></div>
     </div>
 </div>

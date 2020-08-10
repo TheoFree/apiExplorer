@@ -1,0 +1,10 @@
+::ng-deep #radarChart{
+    height:40vw;
+}
+::ng-deep #chart-display>.center{
+    text-align: center;
+}
+::ng-deep #chart-display>.center>.dx-widget{
+    display: inline-block;
+    vertical-align: middle;
+}

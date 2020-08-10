@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DxButtonModule} from 'devextreme-angular'
+import { DxButtonModule,DxPolarChartModule, DxSelectBoxModule} from 'devextreme-angular';
 import { NasaRoutingModule } from './nasa-routing.module';
 import { NasaComponent } from './nasa.component';
 import { ApodComponent } from './components/APOD/apod/apod.component';
@@ -14,7 +14,9 @@ import { InsightComponent } from './components/InSight/insight/insight.component
     CommonModule,
     NasaRoutingModule,
     FormsModule,
-    DxButtonModule
+    DxButtonModule,
+    DxPolarChartModule, 
+    DxSelectBoxModule
   ]
 })
 export class NasaModule { }
