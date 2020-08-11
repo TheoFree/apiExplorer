@@ -46,15 +46,28 @@ export class InsightComponent implements OnInit {
   setSol(sol: string) {
     this.selectedSol = this.collection[sol];
     this.selectedSolNum = sol;
-    this.data = Object.values(this.selectedSol.WD).map(item => {
+    let data = [];
+    data = Object.values(this.selectedSol.WD);
+    data.pop();
+    data=data.map(item => {
+      
       return {
+        
         "arg": item["compass_point"],
         "point": item['compass_degrees'],
         "val": item['ct']
       }
     }).concat(this.allDirections).sort((a,b)=>{return a.point-b.point});
-    console.log(this.data);
     
+    let temp = []
+    let lens = '';
+    for(let obj in data){
+      if(data[obj].arg !=lens){
+        temp.push(data[obj]);
+        lens=data[obj].arg;
+      }
+    };
+    this.data = temp;
   }
   ngOnInit(): void {
     this.getInSight_Basic();

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef,AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { } from 'googlemaps';
 @Component({
   selector: 'app-maps',
@@ -7,9 +7,23 @@ import { } from 'googlemaps';
 })
 export class MapsComponent implements OnInit {
 
-  @ViewChild("map",{static:true}) mapElement: ElementRef;
+  @ViewChild("map", { static: true }) mapElement: ElementRef;
   map: google.maps.Map;
   constructor() { }
+  infoWindow = new google.maps.InfoWindow;
+  searchInput:string = '';
+  handleLocationError(browserHasGeolocation, infoWindow, pos ) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ? 
+      'Error: The Geolocation service failed.': 
+      'Error: Your browser doesn\'t support geolocation.');
+      infoWindow.open(this.map)
+  }
+  formatAndSubmit(){
+    if(this.searchInput&&this.searchInput.length<50){
+      
+    }
+  }
 
   ngOnInit(): void {
     const mapProperties = {
@@ -18,8 +32,26 @@ export class MapsComponent implements OnInit {
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapProperties);
+
+    if(navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position)=>{
+        var pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        this.infoWindow.setPosition(pos);
+        this.infoWindow.setContent('Location found.');
+        this.infoWindow.open(this.map);
+        this.map.setCenter(pos);
+
+      }, ()=>{
+        this.handleLocationError(true, this.infoWindow, this.map.getCenter());
+      });
+    } else {
+      this.handleLocationError(false, this.infoWindow, this.map.getCenter());
+    }
   }
-  afterViewInit():void{
+  afterViewInit(): void {
 
   }
 

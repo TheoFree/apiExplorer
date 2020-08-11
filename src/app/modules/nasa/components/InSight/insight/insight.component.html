@@ -1,30 +1,33 @@
 <div class="container-fluid">
     <div class="row text-center">
         <div class="col-sm-4"></div>
-        <div class="col-sm-4">Mars Wind Data per Sol (1 Mars day)</div>
+        <div class="col-sm-4">
+            <h3>
+                <strong> Mars Wind Data per Sol (1 Mars day) </strong>
+            </h3>
+        </div>
         <div class="col-sm-4"></div>
     </div>
-    <div class="row text-center">
-        <div class="col-sm">Chart Goes Below</div>
-    </div>
+
     <div class="row">
-        <div class="col-sm-6 offset-3 text-center">
+        <div class="col-sm-10 offset-1 text-center">
             Select which sol to view:
             <div class="container" *ngIf="this.dataLoaded">
                 <div *ngFor="let sol of this.collection.sol_keys" style="display:inline-block">
-                    <button class="btn btn-sm btn-secondary mx-2" (click)="this.setSol(sol)">{{sol}}</button>
+                    <button class="btn btn-sm btn-secondary mx-2" (click)="this.setSol(sol)">{{sol}}
+                        ({{this.collection[sol].First_UTC.substr(0,10)}})</button>
                 </div>
             </div>
         </div>
     </div>
     <div class="row" *ngIf="this.dataLoaded">
         <div class="col-sm-1"></div>
-        <div id="chart-display"class="col-sm-10">
+        <div id="chart-display" class="col-sm-10">
             <dx-polar-chart #chart id="radarChart" palette="soft" title="Wind Rose, Mars {{this.selectedSolNum}}"
                 [dataSource]="this.data" type="bar">
                 <dxi-series *ngFor="let point of this.series" [valueField]="point.valueField" [name]="point.value">
                 </dxi-series>
-               <dxo-common-series-settings type="stackedbar"></dxo-common-series-settings>
+                <dxo-common-series-settings type="stackedbar"></dxo-common-series-settings>
                 <dxo-margin [bottom]="50" [left]="100">
                 </dxo-margin>
                 <dxo-argument-axis discreteAxisDivisionMode="crossLabesl" [firstPointOnStartAngle]="true">
@@ -32,8 +35,40 @@
                 <dxo-value-axis [valueMarginsEnabled]="false"></dxo-value-axis>
                 <dxo-export [enabled]="true"></dxo-export>
             </dx-polar-chart>
-            
+
         </div>
         <div class="col-sm-1"></div>
+    </div>
+    <div class="row text-center">
+        <div class="col-sm">
+            <h4>Horizontal Wind Speeds</h4>
+            <br>
+        </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-sm-2 offset-3">
+            <div class="card card-dark">
+                <div class="card-header">Lowest</div>
+                <div class="card-body">{{this.selectedSol.HWS.mn}} m/s</div>
+            </div>
+
+
+        </div>
+        <div class="col-sm-2">
+            <div class="card card-dark">
+                <div class="card-header">Average</div>
+                <div class="card-body">{{this.selectedSol.HWS.av}} m/s</div>
+            </div>
+
+
+        </div>
+        <div class="col-sm-2 ">
+            <div class="card card-dark">
+                <div class="card-header">Highest</div>
+                <div class="card-body">{{this.selectedSol.HWS.mx}} m/s</div>
+            </div>
+
+
+        </div>
     </div>
 </div>
