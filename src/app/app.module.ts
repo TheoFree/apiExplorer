@@ -6,11 +6,11 @@ import { AppComponent } from './app.component';
 import { MapsComponent } from './components/apis/maps/maps.component';
 import { HomeComponent } from './components/home/home.component';
 import { NavComponent } from './components/nav/nav.component';
-
+import { GoogleMapsModule } from '@angular/google-maps';
 import { HttpClientModule} from '@angular/common/http';
 import { MydbapiComponent } from './components/apis/mydbapi/mydbapi.component';
 import { ObspracticeComponent } from './components/obs/obspractice/obspractice.component';
-import { NasaComponent } from './components/apis/nasa/nasa.component'
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,14 +18,15 @@ import { NasaComponent } from './components/apis/nasa/nasa.component'
     HomeComponent,
     NavComponent,
     MydbapiComponent,
-    ObspracticeComponent,
-    NasaComponent
+    ObspracticeComponent
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    GoogleMapsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
