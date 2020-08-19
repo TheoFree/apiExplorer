@@ -17,7 +17,7 @@ const routes: Routes = [
   },
   {
     path:'mydbapi',
-    component:MydbapiComponent
+    redirectTo:'home'
   },
   {
     path:'maps',
