@@ -45,3 +45,6 @@ testem.log
 .DS_Store
 Thumbs.db
 src/app/webdev_and_practice.code-workspace
+.firebaserc
+firebase.json
+.firebase/hosting.ZGlzdFxhcGlFeHBsb3Jlcg.cache
