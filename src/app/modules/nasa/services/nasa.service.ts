@@ -6,8 +6,14 @@ import { Observable } from 'rxjs';
 })
 export class NasaService {
   getAPOD(): Observable<any> {
+    const date = new Date;
+    const dateTimeFormat = new Intl.DateTimeFormat('en', { year: 'numeric', month: '2-digit', day: '2-digit' });
+    const [{ value: month },,{ value: day },,{ value: year }] = dateTimeFormat .formatToParts(date);
+    const formattedDate = `${year}-${month}-${day}`;
+    console.log(formattedDate);
     return this.http.get('https://api.nasa.gov/planetary/apod?', {
       params: new HttpParams()
+        .set('date', formattedDate)
         .set('hd', 'true')
         .set('api_key', 'MYWe0Bg89zVn5pmrUh7GY0Vfav9zG6XB2NeGf5A4')
     })
@@ -36,8 +42,11 @@ export class NasaService {
     }
   }
   getNEO_Asteroid(astroid_id?:number, astroid_Link?:string):Observable<any>{
-    return ((astroid_Link) ? this.http.get(astroid_Link) : this.http.get('https://api.nasa.gov/neo/rest/v1/neo/'+ astroid_id.toString(), {
+    // var url=`https${astroid_Link.slice(4)}`
+    // console.log(url);
+    return ((astroid_Link) ? this.http.get(`https${astroid_Link.slice(4)}`) : this.http.get('https://api.nasa.gov/neo/rest/v1/neo/', {
       params: new HttpParams()
+        .set('asteroid_id', astroid_id.toString())
         .set('api_key', 'MYWe0Bg89zVn5pmrUh7GY0Vfav9zG6XB2NeGf5A4')
     }))
   }

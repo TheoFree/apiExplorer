@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { KeyValue } from '@angular/common'
 import { NasaService } from '../../../services/nasa.service';
-//mport { DxPolarChartModule, DxSelectBoxModule } from 'devextreme-angular';
-//import {  } from  'node_modules/devextreme-angular'
+
 @Component({
   selector: 'app-insight',
   templateUrl: './insight.component.html',

@@ -67,7 +67,7 @@
                                         (click)="this.getNeoObject(undefined,astroid.links.self)">
                                         {{astroid.neo_reference_id}}</button>
                                 </td>
-                                <td><a [href]="astroid.nasa_jpl_url">{{astroid.nasa_jpl_url}}</a></td>
+                                <td><a [href]="astroid.nasa_jpl_url" target="_blank">{{astroid.nasa_jpl_url}}</a></td>
                             </tr>
                         </tbody>
                     </table>
@@ -130,7 +130,7 @@
                             {{this.NEOAstroidData.designation}}
                             <br>
                             Nasa JPL URL: <a
-                                [href]="this.NEOAstroidData.nasa_jpl_url">{{this.NEOAstroidData.nasa_jpl_url}}</a>
+                                [href]="this.NEOAstroidData.nasa_jpl_url" target="_blank">{{this.NEOAstroidData.nasa_jpl_url}}</a>
                         </strong>
                     </h3>
                     <button class="btn btn-secondary" *ngIf="this.NEOFeedData" (click)="this.goToFeed()"
